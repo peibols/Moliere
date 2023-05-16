@@ -12,7 +12,7 @@ int nbins_kcm;
 
 bool use_kcm_tables = 0;
 
-void read_kcm_tables() {
+void read_kcm_tables(std::string tables_path) {
 
   //Allocate tables
   int nX=7, nA=68, nP=SIZE_PIN, nY=SIZE_X, nK=SIZE_KCM;
@@ -94,7 +94,7 @@ void read_kcm_tables() {
 	exit(1);
       }
       std::ostringstream fsi;
-      fsi << "../table_runner/tables/m" << iX+1 << "kcm_g_" << int(g) << "_d_" << int(d) << "_n_" << int(n) << ".dat";
+      fsi << tables_path.c_str() << "m" << iX+1 << "kcm_g_" << int(g) << "_d_" << int(d) << "_n_" << int(n) << ".dat";
       std::ifstream infile(fsi.str().c_str());
       if (infile.fail()) {
         std::cout << "No file = " << fsi.str().c_str() << std::endl;
