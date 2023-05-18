@@ -10,11 +10,11 @@
 #include <gsl/gsl_spline2d.h>
 
 double ****mx_table;
-const gsl_interp2d_type *TmX = gsl_interp2d_bilinear; //SO MUCH FASTER THAN BICUBIC
+//const gsl_interp2d_type *TmX = gsl_interp2d_bilinear; //SO MUCH FASTER THAN BICUBIC
 //const gsl_interp2d_type *TmX = gsl_interp2d_bicubic;
-gsl_interp_accel *xacc;
-gsl_interp_accel *yacc;
-gsl_spline2d *spline;
+//gsl_interp_accel *xacc;
+//gsl_interp_accel *yacc;
+//gsl_spline2d *spline;
 
 const int SIZE_PIN = 501;
 const int SIZE_X = 101;
@@ -124,9 +124,9 @@ void read_tables(std::string tables_path) {
   }
   std::cout << "Finished reading mX tables" << std::endl;
 
-  spline = gsl_spline2d_alloc(TmX, nP, nY);
-  xacc = gsl_interp_accel_alloc();
-  yacc = gsl_interp_accel_alloc();
+  //spline = gsl_spline2d_alloc(TmX, nP, nY);
+  //xacc = gsl_interp_accel_alloc();
+  //yacc = gsl_interp_accel_alloc();
 
   pin_step = (pin_max - pin_min)/double(nbins_pin);
   for (int iP=0; iP<nP; iP++) pin_vals[iP] = pin_min + pin_step*double(iP);

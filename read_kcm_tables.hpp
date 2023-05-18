@@ -16,6 +16,8 @@ void read_kcm_tables(std::string tables_path) {
 
   //Allocate tables
   int nX=7, nA=68, nP=SIZE_PIN, nY=SIZE_X, nK=SIZE_KCM;
+  //nP=10, nY=10, nK=10; //DEBUG
+  //nK=10;
   mkcm_table = (double *****)malloc(nX * sizeof(double ****));
   if (mkcm_table==NULL)
   {
@@ -77,6 +79,8 @@ void read_kcm_tables(std::string tables_path) {
     }
   }
 
+  std::cout << "Kcm tables memory allocated" << std::endl;
+
   //Read
   int nbins_pin, nbins_x;
   for (int iX=0; iX<nX; iX++) {
@@ -116,7 +120,7 @@ void read_kcm_tables(std::string tables_path) {
         std::istringstream ifi(s);
         for (int iP=0; iP<nP; iP++) {
 	  for (int iK=0; iK<nK; iK++) {
-	    ifi >> mkcm_table[iX][iA][iP][iY][iK];
+	    //ifi >> mkcm_table[iX][iA][iP][iY][iK];
 	  }
 	}
       }

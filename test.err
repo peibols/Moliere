@@ -1,0 +1,2 @@
+/var/spool/slurmd/job16945615/slurm_script: line 10: 3422032 Killed                  ./table_test
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=16945615.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.

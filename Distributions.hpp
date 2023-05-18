@@ -1279,6 +1279,7 @@ double makcm_f (double y, void * p)
     if (a==7) return m7dk(inf,y,x,pin,g,d,n,w)-m7dk(0,y,x,pin,g,d,n,w);
 }
 
+/*
 double do_kcm_interp(int iX, double x, double pin, double kcm, int g, int d, int n)
 {
 
@@ -1335,6 +1336,7 @@ double do_kcm_interp(int iX, double x, double pin, double kcm, int g, int d, int
   return result;
 
 }
+*/
 
 //////////had to numerically integrate
 double m1kcm(double kcm,double x,double pin,double g,double d,double n,gsl_integration_workspace *wdk, gsl_integration_workspace *wkcm)
@@ -1348,7 +1350,7 @@ double m1kcm(double kcm,double x,double pin,double g,double d,double n,gsl_integ
     if (kcm==0) return 0;
     if (x==0) return 0;
 
-    if (use_kcm_tables) return do_kcm_interp(1, x, pin, kcm, int(g), int(d), int(n));
+    //if (use_kcm_tables) return do_kcm_interp(1, x, pin, kcm, int(g), int(d), int(n));
 
     gsl_function F;
     struct makcm_params params = {x,pin,g,d,n,1,wdk};
@@ -1405,7 +1407,7 @@ double m2kcm(double kcm,double x,double pin,double g,double d,double n,gsl_integ
     //std::cout << "starting m2kcm "<< std::endl;
     // exit(EXIT_FAILURE);
 
-    if (use_kcm_tables) return do_kcm_interp(2, x, pin, kcm, int(g), int(d), int(n));
+    //if (use_kcm_tables) return do_kcm_interp(2, x, pin, kcm, int(g), int(d), int(n));
     
     gsl_function F;
     struct makcm_params params = {x,pin,g,d,n,2,wdk};
@@ -1459,7 +1461,7 @@ double m3kcm(double kcm,double x,double pin,double g,double d,double n,gsl_integ
     //std::cout << "starting m3kcm "<< std::endl;
     // exit(EXIT_FAILURE);
     
-    if (use_kcm_tables) return do_kcm_interp(3, x, pin, kcm, int(g), int(d), int(n));
+    //if (use_kcm_tables) return do_kcm_interp(3, x, pin, kcm, int(g), int(d), int(n));
 
     gsl_function F;
     struct makcm_params params = {x,pin,g,d,n,3,wdk};
@@ -1511,7 +1513,7 @@ double m4kcm(double kcm,double x,double pin,double g,double d,double n,gsl_integ
     if (kcm==0) return 0;
     if (x==0) return 0;
     
-    if (use_kcm_tables) return do_kcm_interp(4, x, pin, kcm, int(g), int(d), int(n));
+    //if (use_kcm_tables) return do_kcm_interp(4, x, pin, kcm, int(g), int(d), int(n));
     
     //std::cout << "starting m4kcm "<< std::endl;
     // exit(EXIT_FAILURE);
@@ -1567,7 +1569,7 @@ double m5kcm(double kcm,double x,double pin,double g,double d,double n,gsl_integ
     //std::cout << "starting m5kcm "<< std::endl;
     // exit(EXIT_FAILURE);
     
-    if (use_kcm_tables) return do_kcm_interp(5, x, pin, kcm, int(g), int(d), int(n));
+    //if (use_kcm_tables) return do_kcm_interp(5, x, pin, kcm, int(g), int(d), int(n));
     
     gsl_function F;
     struct makcm_params params = {x,pin,g,d,n,5,wdk};
@@ -1621,7 +1623,7 @@ double m6kcm(double kcm,double x,double pin,double g,double d,double n,gsl_integ
     //std::cout << "starting m6kcm "<< std::endl;
     // exit(EXIT_FAILURE);
     
-    if (use_kcm_tables) return do_kcm_interp(6, x, pin, kcm, int(g), int(d), int(n));
+    //if (use_kcm_tables) return do_kcm_interp(6, x, pin, kcm, int(g), int(d), int(n));
     
     gsl_function F;
     struct makcm_params params = {x,pin,g,d,n,6,wdk};
@@ -1674,7 +1676,7 @@ double m7kcm(double kcm,double x,double pin,double g,double d,double n,gsl_integ
     if (x==0) return 0;
     // exit(EXIT_FAILURE);
     
-    if (use_kcm_tables) return do_kcm_interp(7, x, pin, kcm, int(g), int(d), int(n));
+    //if (use_kcm_tables) return do_kcm_interp(7, x, pin, kcm, int(g), int(d), int(n));
     
     gsl_function F;
     struct makcm_params params = {x,pin,g,d,n,7,wdk};
@@ -1749,6 +1751,49 @@ double max_f (double y, void * p)
 
 double do_interp(int iX, double x, double pin, int g, int d, int n)
 {
+
+  if (n>17) {
+    std::cout << "iX= " << iX << " n= " << n << " is too large for current tabulation! EXITING" << std::endl;
+    return 0.;
+    exit(1);
+  }
+
+  int iA = (n-1)*4;
+  if (g == -1 && d == -1) iA += 0;
+  if (g == -1 && d == 1) iA += 1;
+  if (g == 1 && d == -1) iA += 2;
+  if (g == 1 && d == 1) iA += 3;
+
+  if (x > 1) {
+    std::cout << " x > 1 in mIx, x = " << x << std::endl;
+    exit(1);
+    //x=1.; //CHECK
+  }
+
+  int ux = int(x/step_x);
+  double dux = (x - double(ux)*step_x)/step_x;
+  int fux = 1;
+  if (ux == SIZE_X-1) fux = 0, dux = 0.;
+
+  int up = int((pin - pin_min)/pin_step);
+  double dup = (pin - pin_min - double(up)*pin_step)/pin_step;
+  int fup = 1;
+  if (up == SIZE_PIN-1) fup = 0, dup = 0.;
+
+  double result = 0.;
+
+  result += mx_table[iX-1][iA][up][ux]*(1.-dup)*(1.-dux);
+  result += mx_table[iX-1][iA][up+fup][ux]*dup*(1.-dux);
+  result += mx_table[iX-1][iA][up][ux+fux]*(1.-dup)*dux;
+  result += mx_table[iX-1][iA][up+fup][ux+fux]*dup*dux;
+
+  return result;
+
+}
+
+/*
+double do_interp(int iX, double x, double pin, int g, int d, int n)
+{
   
   if (n>17) {
     std::cout << "iX= " << iX << " n= " << n << " is too large for current tabulation! EXITING" << std::endl;
@@ -1783,6 +1828,7 @@ double do_interp(int iX, double x, double pin, int g, int d, int n)
   return gsl_spline2d_eval(spline, pin, x, xacc, yacc);
 
 }
+*/
 
 double m1x(double x,double pin,double g,double d,double n,gsl_integration_workspace *wdk,gsl_integration_workspace *wkcm,gsl_integration_workspace *wx ) 
 {
