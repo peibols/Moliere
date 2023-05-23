@@ -16,6 +16,7 @@ int main()
   gsl_integration_workspace *wx = gsl_integration_workspace_alloc(100000);
 
   std::string tables_path="../table_runner/tables/";
+  //std::string tables_path="./mIx_tables/";
   read_tables(tables_path);
   use_tables = 1;
  
@@ -37,7 +38,7 @@ int main()
   }
   */
 
-  double x = 1.;
+  double x = 0.52;
   double g = -1.;
   double d = 1.;
   double n= 6.;
@@ -46,9 +47,9 @@ int main()
     double pin = double(i)*step_pin+step_pin/7.;
     //pin = double(i)*step_pin+pin_min;
     use_tables = 0;
-    double num_result = m1x(x, pin, g, d, n, wdk, wkcm, wx); 
+    double num_result = m7x(x, pin, g, d, n, wdk, wkcm, wx); 
     use_tables = 1;
-    double tab_result = m1x(x, pin, g, d, n, wdk, wkcm, wx);
+    double tab_result = m7x(x, pin, g, d, n, wdk, wkcm, wx);
     std::cout << std::setprecision(9) << "Num_result= " << num_result << " Tab_result= " << tab_result << std::endl;
   }
    

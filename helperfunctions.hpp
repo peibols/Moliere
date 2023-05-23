@@ -27,6 +27,8 @@ double abs_res_dk=pow(10,-15);
 double rel_res_dk=pow(10,-10);
 
 
+double small_number = std::pow(10,-7);
+
 // 1.00021 1.00024 1.00027 2.89406 -2615.45 13.7553 286.85
 // 1.00021 1.00024 1.00027 2.77496 -2450.89 12.9503 268.808
 // 1.00021 1.00024 1.00027 2.76304 -2434.42 12.8697 267.003
@@ -763,7 +765,8 @@ double BesselI_scaled(double i, double x, double psi)
 {
     //int exp(-x*cos(psi)-x)*cos(i*psi) from pi to 0
     if (psi==0) return -gsl_sf_bessel_In_scaled(i,-x)*M_PI;
-    if (psi==M_PI) return 0;
+    //if (psi==M_PI) return 0;
+    if (fabs(psi-M_PI)<small_number) return 0;
     double inc=0;
     double sum=0;
 
@@ -797,7 +800,8 @@ double expKint(double P,double M, double psi,double j,double b, double n,gsl_int
 {
     //if (psi==0) return 0;
     //std::cout << "starting expkint" << std::endl;
-    if (psi==M_PI) return 0;
+    if (fabs(psi-M_PI)<small_number) return 0;
+    //if (psi==M_PI) return 0;
     if (M==0) 
     {
         double cons=1;
@@ -1201,10 +1205,11 @@ double expintK(double P,double M, double psi,double i,double j,double b, double 
         exit(EXIT_FAILURE);
     } 
     // std::cout<<result<<std::endl;
+    //std::cout << " psi-Pi= " <<std::setprecision(18) <<  psi-M_PI << std::endl;
     gsl_integration_qags(&F, M_PI, psi, epsabs, epsrel, limit, w, &result, &abserr);
     if (result!=result||abs(result)==inf) 
     {
-        std::cout << "expintK failure1  "<< result<<"  "<<P<<"  "<<M<<"   "<<i<<"   "<<j<<"   "<<b<<"     "<<a<<"    "<<n<<std::endl;
+        std::cout << "expintK failure1  "<< result<<"  "<<P<<"  "<<M<<"   "<<i<<"   "<<j<<"   "<<b<<"     "<<a<<"    "<<n<< " psi= " << psi << std::endl;
         exit(EXIT_FAILURE);
     }
     return result;
@@ -1214,7 +1219,8 @@ double expintK(double P,double M, double psi,double i,double j,double b, double 
     //     std::cout << "b<0" << std::endl;
     //     exit(EXIT_FAILURE);
     // }
-    if (psi==M_PI) return 0;
+    //if (psi==M_PI) return 0;
+    if (fabs(psi-M_PI)<small_number) return 0;
 
     if (i!=1)
     {

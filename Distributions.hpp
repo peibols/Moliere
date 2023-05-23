@@ -34,7 +34,6 @@ double amD2=10*gsmd*gsmd/3*(Nc+Nf/2);
 
 //^^^^^^^^^^^^^^^^^^^^^^^^
 
-
 std::default_random_engine generator;
 std::uniform_real_distribution<double> distcon(0.0,1.0);
 std::uniform_int_distribution<> distint(0,1);
@@ -214,7 +213,8 @@ double Psiso_(double dk,double kcm,double x,double pin)
 {
     if (dk==inf) return 0;
     double psi=psi_(dk,kcm,x,pin);
-    if (psi==M_PI) return 0;
+    if (fabs(psi-M_PI)<small_number) return 0;
+    //if (psi==M_PI) return 0;
     double Ps=P_(kcm,x,pin)-s_(kcm,x,pin);
     double M=M_(kcm,x,pin);
     if (Ps>=M)
@@ -340,7 +340,7 @@ double Vu(double phi,double dk,double kcm,double x,double pin,double middle=1)
 double phigamint(double kcm, double x, double pin, double dk, double n, double i,gsl_integration_workspace *w, double u = 0 )
 {
     double psi=psi_(dk,kcm,x,pin);
-    if (psi==M_PI) return 0;
+    if (fabs(psi-M_PI)<small_number) return 0;
     if(!w)
     {
         std::cout << "set the workspace in phigamint  "<<std::endl;
@@ -682,7 +682,8 @@ double special(double dk, double kcm, double x, double pin, double n,gsl_integra
 {
     
     double psi=psi_(dk,kcm,x,pin);
-    if (psi==M_PI) return 0;
+    if (fabs(psi-M_PI)<small_number) return 0;
+    //if (psi==M_PI) return 0;
     
     double s=s_(kcm,x,pin);
     double P=P_(kcm,x,pin);
@@ -1781,6 +1782,11 @@ double do_interp(int iX, double x, double pin, int g, int d, int n)
   if (up == SIZE_PIN-1) fup = 0, dup = 0.;
 
   double result = 0.;
+
+  std::cout << "tables= " << mx_table[iX-1][iA][up][ux] << " " << mx_table[iX-1][iA][up+fup][ux] << " " << mx_table[iX-1][iA][up][ux+fux] << " " << mx_table[iX-1][iA][up+fup][ux+fux] << std::endl;
+  std::cout << "ux= " << ux << " dux= " << dux << std::endl;
+  std::cout << " iX= " << iX << " iA " << iA << std::endl;
+
 
   result += mx_table[iX-1][iA][up][ux]*(1.-dup)*(1.-dux);
   result += mx_table[iX-1][iA][up+fup][ux]*dup*(1.-dux);
