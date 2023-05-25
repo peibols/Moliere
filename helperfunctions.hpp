@@ -159,7 +159,8 @@ double expEn(double n,double x)//This will only work for n>=0
     if (x==inf) return 0;
 
     if (x==0 && n>1) return 1/(n-1);
-    if (x==0 && n<=1) return inf;
+    //if (x==0 && n<=1) return inf;
+    if (x==0 && n<=1) return std::pow(10.,50.);
 
     if (n==0) return 1/x;
     // if ((n==1||n==2)&&x>500) std::cout<<"ExpEn "<< n<< "   "<<x<<std::endl;
@@ -1183,7 +1184,12 @@ double expint_f (double x, void * p)
     double b = (params->b);
     double K=P+M*cos(x);
 
-    return  expEn(i,n*(K+a))*pow(K+b,j)*exp(-n*(K))/M_PI;
+    double res_expen = expEn(i,n*(K+a));
+    if (res_expen!=res_expen || abs(res_expen)==inf) {
+      std::cout << " res_expen = " << res_expen << "K=" << K << " a= " << a << " x= " << x << std::endl;
+    }
+
+    return  res_expen*pow(K+b,j)*exp(-n*(K))/M_PI;
 }
 
 double expintK(double P,double M, double psi,double i,double j,double b, double a,double n, gsl_integration_workspace *w )
@@ -1204,7 +1210,7 @@ double expintK(double P,double M, double psi,double i,double j,double b, double 
         std::cout << "set the workspace in expintk  "<<std::endl;
         exit(EXIT_FAILURE);
     } 
-    // std::cout<<result<<std::endl;
+    //std::cout<<result<<std::endl;
     //std::cout << " psi-Pi= " <<std::setprecision(18) <<  psi-M_PI << std::endl;
     gsl_integration_qags(&F, M_PI, psi, epsabs, epsrel, limit, w, &result, &abserr);
     if (result!=result||abs(result)==inf) 

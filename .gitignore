@@ -3,4 +3,7 @@ mIx_tables
 table_test
 bug_finder
 table_maker
+piece_table_maker
+*err
+*out
 *gz

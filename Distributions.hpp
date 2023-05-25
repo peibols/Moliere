@@ -1783,9 +1783,9 @@ double do_interp(int iX, double x, double pin, int g, int d, int n)
 
   double result = 0.;
 
-  std::cout << "tables= " << mx_table[iX-1][iA][up][ux] << " " << mx_table[iX-1][iA][up+fup][ux] << " " << mx_table[iX-1][iA][up][ux+fux] << " " << mx_table[iX-1][iA][up+fup][ux+fux] << std::endl;
-  std::cout << "ux= " << ux << " dux= " << dux << std::endl;
-  std::cout << " iX= " << iX << " iA " << iA << std::endl;
+  //std::cout << "tables= " << mx_table[iX-1][iA][up][ux] << " " << mx_table[iX-1][iA][up+fup][ux] << " " << mx_table[iX-1][iA][up][ux+fux] << " " << mx_table[iX-1][iA][up+fup][ux+fux] << std::endl;
+  //std::cout << "ux= " << ux << " dux= " << dux << std::endl;
+  //std::cout << " iX= " << iX << " iA " << iA << std::endl;
 
 
   result += mx_table[iX-1][iA][up][ux]*(1.-dup)*(1.-dux);

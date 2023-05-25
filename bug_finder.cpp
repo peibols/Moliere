@@ -22,9 +22,9 @@ int main()
   double step_x = 1./double(xbins);
   double step_pin = (pin_max-pin_min)/double(pinbins);
   
-  double g = 1.;
-  double d = 1.;
-  double n= 9.;
+  double g = -1.;
+  double d = -1.;
+  double n= 1.;
   
   int ijob=0;
   for (int i=0; i<=xbins; i++) {
@@ -34,7 +34,7 @@ int main()
       double pin = pin_min + double(j)*step_pin;
   
       ijob++;
-      if (ijob<26966) continue;
+      if (ijob<37032) continue;
 
       std::cout << " x= " << x << " pin= " << pin << std::endl;
       double num_result = m6x(x, pin, g, d, n, wdk, wkcm, wx);

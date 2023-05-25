@@ -115,7 +115,12 @@ void read_tables(std::string tables_path) {
 	  break;
 	}
         std::istringstream ifi(s);
-        for (int iP=0; iP<nP; iP++) ifi >> mx_table[iX][iA][iP][iY];
+        for (int iP=0; iP<nP; iP++) {
+	  double temp_tab;
+	  ifi >> temp_tab;
+	  if (temp_tab != temp_tab) std::cout << "inf in table!! \n \n" << std::endl;
+	  mx_table[iX][iA][iP][iY] = temp_tab;
+        }
       }
       infile.close();
 
@@ -139,10 +144,6 @@ void read_tables(std::string tables_path) {
   step_x = 1./double(nbins_x);
   for (int iY=0; iY<nY; iY++) x_vals[iY] = step_x*double(iY);
   //for (int iY=0; iY<nY; iY++) std::cout << " x_vals iY= " << iY << " = " << x_vals[iY] << std::endl;
-
-  for (int iY=0; iY<nY; iY++) {
-    std::cout << " read_tab= " << mx_table[6][21][30][iY] << std::endl;
-  }
 
   return;
 
